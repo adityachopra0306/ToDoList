@@ -18,7 +18,7 @@ public class ToDoList extends Application {
     private TagManager tagManager;
     private UserProgress userProgress;
     private LocalDate today;
-    private BorderPane mainLayout; // Declare mainLayout as a class-level variable
+    private BorderPane mainLayout;
 
     @Override
     public void start(Stage primaryStage) {
@@ -34,28 +34,26 @@ public class ToDoList extends Application {
         Button homeButton = new Button("Home");
         styleSidebarButton(homeButton);
         homeButton.setOnAction(e -> {
-            mainLayout.setCenter(taskListContainer); // Go back to displaying tasks
+            mainLayout.setCenter(taskListContainer);
             loadTasksForThreeDays();
         });
 
         Button calendarButton = new Button("Calendar");
         styleSidebarButton(calendarButton);
         calendarButton.setOnAction(e -> {
-            taskListContainer.getChildren().clear();  // Clear current tasks
-            // Create the DatePicker and allow the user to select a date
-            DatePicker dueDatePicker = new DatePicker(today); // Preselect the current date
+            taskListContainer.getChildren().clear();
+            DatePicker dueDatePicker = new DatePicker(today);
             dueDatePicker.setPromptText("Select Due Date");
             
-            // Button to load tasks for the selected date
             Button loadTasksBtn = new Button("Load Tasks");
             loadTasksBtn.setOnAction(event -> {
-                LocalDate selectedDate = dueDatePicker.getValue();  // Get the selected date after user interaction
+                LocalDate selectedDate = dueDatePicker.getValue();
                 if (selectedDate != null) {
                     mainLayout.setCenter(taskListContainer);
                     taskListContainer.getChildren().clear();
-                    displayTasksForDate(selectedDate);  // Display tasks for the selected date
+                    displayTasksForDate(selectedDate);  
                 } else {
-                    // Show an alert if no date is selected
+                     
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Please select a date");
                     alert.show();
                 }
@@ -63,12 +61,12 @@ public class ToDoList extends Application {
 
             VBox calendarLayout = new VBox(10, dueDatePicker, loadTasksBtn);
             calendarLayout.setPadding(new Insets(20));
-            mainLayout.setCenter(calendarLayout);  // Set the new layout with the DatePicker in the center
+            mainLayout.setCenter(calendarLayout);   
         });
 
         Button addTaskButton = new Button("Add Task");
         styleSidebarButton(addTaskButton);
-        addTaskButton.setOnAction(e -> openAddTaskDialog(today)); // Open add task form in the same window
+        addTaskButton.setOnAction(e -> openAddTaskDialog(today));  
 
         Button tagButton = new Button("Manage Tags");
         styleSidebarButton(tagButton);
@@ -93,11 +91,11 @@ public class ToDoList extends Application {
         
         scene.setOnScroll(event -> {
             double SCROLL_TOP = 0;
-            double deltaY = event.getDeltaY(); // Get the scroll amount
+            double deltaY = event.getDeltaY();  
             double newTranslate = taskListContainer.getTranslateY() + deltaY * 0.5;
             if (newTranslate < SCROLL_TOP)
-                taskListContainer.setTranslateY(newTranslate); // Adjust the position
-            event.consume(); // Consume the event to prevent default scrolling
+                taskListContainer.setTranslateY(newTranslate);  
+            event.consume();  
         });
         
         primaryStage.setScene(scene);
@@ -178,9 +176,9 @@ public class ToDoList extends Application {
         ListView<Tag> tagListView = new ListView<>();
         tagListView.getItems().addAll(tagManager.getTagList());
         tagListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        // Set preferred width and height for the ListView
-        tagListView.setPrefWidth(100);  // Set your desired width
-        tagListView.setPrefHeight(20*tagManager.getTagList().size()); // Set your desired height
+         
+        tagListView.setPrefWidth(100);   
+        tagListView.setPrefHeight(20*tagManager.getTagList().size());  
 
         tagListView.setCellFactory(lv -> new ListCell<Tag>() {        
         
@@ -190,12 +188,12 @@ public class ToDoList extends Application {
                 setText(null);
                 setGraphic(null);
             } else {
-                HBox cellLayout = new HBox(10);  // Layout for each cell
+                HBox cellLayout = new HBox(10);   
 
-            // Circle to display the tag color
+             
                 Circle colorCircle = new Circle(10, tag.getColor());
 
-            // Label to display the tag name
+             
                 Label nameLabel = new Label(tag.getName());
 
                 cellLayout.getChildren().addAll(colorCircle, nameLabel);
@@ -204,7 +202,7 @@ public class ToDoList extends Application {
         }
     });
 
-        // Add Task Button
+         
         Button rmTagBtn = new Button("Remove Tag");
         rmTagBtn.setOnAction(e -> {
             ArrayList<Tag> selectedTags = new ArrayList<>(tagListView.getSelectionModel().getSelectedItems());
@@ -230,24 +228,24 @@ public class ToDoList extends Application {
             mainLayout.setCenter(addTagFormLayout);
         });
         
-        // Layout for task input form
+         
         VBox tagFormLayout = new VBox(20, tagListView, rmTagBtn, addTagBtn);
         tagFormLayout.setPadding(new Insets(10));
         mainLayout.setCenter(tagFormLayout);
     }
 
-    // Open a dialog to add a new task
+     
     private void openAddTaskDialog(LocalDate date) {
         TextField taskNameField = new TextField();
         taskNameField.setPromptText("Task Name");
         TextArea descriptionField = new TextArea();
         descriptionField.setPromptText("Description");
-        descriptionField.setPrefSize(150, 100); // Set preferred size (width and height)
+        descriptionField.setPrefSize(150, 100);  
         descriptionField.setWrapText(true);
-        DatePicker dueDatePicker = new DatePicker(date); // Preselect the current date
+        DatePicker dueDatePicker = new DatePicker(date);  
         dueDatePicker.setPromptText("Due Date");
 
-        // Priority dropdown
+         
         ComboBox<Task.Priority> priorityComboBox = new ComboBox<>();
         priorityComboBox.getItems().addAll(Task.Priority.HIGH, Task.Priority.MEDIUM, Task.Priority.LOW);
         priorityComboBox.setPromptText("Priority");
@@ -255,9 +253,9 @@ public class ToDoList extends Application {
         ListView<Tag> tagListView = new ListView<>();
         tagListView.getItems().addAll(tagManager.getTagList());
         tagListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        // Set preferred width and height for the ListView
-        tagListView.setPrefWidth(100);  // Set your desired width
-        tagListView.setPrefHeight(20*tagManager.getTagList().size()); // Set your desired height
+         
+        tagListView.setPrefWidth(100);   
+        tagListView.setPrefHeight(20*tagManager.getTagList().size());  
 
         tagListView.setCellFactory(lv -> new ListCell<Tag>() {
     
@@ -267,12 +265,12 @@ public class ToDoList extends Application {
                 setText(null);
                 setGraphic(null);
             } else {
-                HBox cellLayout = new HBox(10);  // Layout for each cell
+                HBox cellLayout = new HBox(10);   
 
-            // Circle to display the tag color
+             
                 Circle colorCircle = new Circle(10, tag.getColor());
 
-            // Label to display the tag name
+             
                 Label nameLabel = new Label(tag.getName());
 
                 cellLayout.getChildren().addAll(colorCircle, nameLabel);
@@ -281,7 +279,7 @@ public class ToDoList extends Application {
         }
     });
 
-        // Add Task Button
+         
         Button addTaskBtn = new Button("Add Task");
         addTaskBtn.setOnAction(e -> {
             String taskName = taskNameField.getText();
@@ -289,33 +287,33 @@ public class ToDoList extends Application {
             LocalDate dueDate = dueDatePicker.getValue();
             Task.Priority priority = priorityComboBox.getValue();
             ArrayList<Tag> selectedTags = new ArrayList<>(tagListView.getSelectionModel().getSelectedItems());
-            //System.out.println(selectedTags.toString());
+             
             if (selectedTags.size()==0) selectedTags=null;
 
             if (!taskName.isEmpty() && priority != null && dueDate != null) {
                 Task newTask = new Task(taskName, description, dueDate, priority, selectedTags);
                 taskMap.addTask(dueDate, newTask);
                 userProgress.addPending(newTask);
-                //System.out.println(newTask.getTags().toString());
-                //displayTasksForDate(dueDate);  // Refresh the task list
-                mainLayout.setCenter(taskListContainer); // Go back to displaying tasks
+                 
+                 
+                mainLayout.setCenter(taskListContainer);  
                 loadTasksForThreeDays();
             } else {
-                // Error handling
+                 
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill all fields");
                 alert.show();
             }
         });
 
-        // Layout for task input form
+         
         VBox taskFormLayout = new VBox(10, taskNameField, descriptionField, dueDatePicker, priorityComboBox, tagListView, addTaskBtn);
         taskFormLayout.setPadding(new Insets(10));
 
-        // Set the task form in the center of the main layout
+         
         mainLayout.setCenter(taskFormLayout);
     }
 
-    // Display tasks for a specific date
+     
     private void displayTasksForDate(LocalDate date) {
         ArrayList<Task> tasksForDate = taskMap.getTasks(date);
 
@@ -345,15 +343,15 @@ public class ToDoList extends Application {
         }
     }
 
-    // Display an individual task with edit and delete options
+     
     private void displayTask(Task task) {
-        HBox taskBox = new HBox(10);  // Horizontal box for task details and buttons
+        HBox taskBox = new HBox(10);   
         taskBox.setPadding(new Insets(15));
         taskBox.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 1);");
 
-        Rectangle pri = new Rectangle(10, 80);  // Width of 10 and height of 80 (adjust height as needed)
+        Rectangle pri = new Rectangle(10, 80);   
     
-    // Set the fill color based on a condition
+     
     if (task.getPriority()==Task.Priority.HIGH) {
         pri.setFill(javafx.scene.paint.Color.RED);
     } else if (task.getPriority()==Task.Priority.MEDIUM) {
@@ -377,7 +375,7 @@ public class ToDoList extends Application {
             loadTasksForThreeDays();
         }
     });
-        // Task details: Name, Description, Due Date
+         
         Label nameLabel = new Label(task.getName());
         nameLabel.setFont(Font.font(16));
         Label descriptionLabel = new Label(task.getDescription());
@@ -385,17 +383,17 @@ public class ToDoList extends Application {
         VBox taskDetails = new VBox(nameLabel, descriptionLabel, dueDateLabel);
     
         HBox tagBox = new HBox(20);
-        tagBox.setPadding(new Insets(10));  // Horizontal box for tags (name + color)
-        tagBox.setAlignment(Pos.CENTER_RIGHT);  // Align to the right
+        tagBox.setPadding(new Insets(10));   
+        tagBox.setAlignment(Pos.CENTER_RIGHT);   
         if (task.getTags()!=null){
-        for (Tag tag : task.getTags()) {  // Assuming task.getTags() returns a list of Tag objects
-            Circle tagCircle = new Circle(5);  // Circle with radius 5 for the color
-            tagCircle.setFill(tag.getColor());  // Set the tag's color
+        for (Tag tag : task.getTags()) {   
+            Circle tagCircle = new Circle(5);   
+            tagCircle.setFill(tag.getColor());   
             
-            Label tagName = new Label(tag.getName());  // Label for the tag name
+            Label tagName = new Label(tag.getName());   
         
-            HBox singleTag = new HBox(5, tagCircle, tagName);  // HBox for each tag (circle + name)
-            tagBox.getChildren().add(singleTag);  // Add each tag to the tag box
+            HBox singleTag = new HBox(5, tagCircle, tagName);   
+            tagBox.getChildren().add(singleTag);   
         }}
 
         Button deleteButton = new Button("Delete");
@@ -406,16 +404,16 @@ public class ToDoList extends Application {
             loadTasksForThreeDays();
         });
     
-        HBox actionButtons = new HBox(20, deleteButton);  // Horizontal box for buttons
-        actionButtons.setAlignment(Pos.CENTER_RIGHT);  // Align the buttons to the right
+        HBox actionButtons = new HBox(20, deleteButton);   
+        actionButtons.setAlignment(Pos.CENTER_RIGHT);   
     
-        // Make sure the task details take up all available space on the left
-        HBox.setHgrow(taskDetails, Priority.ALWAYS);  // Let taskDetails expand to fill space
+         
+        HBox.setHgrow(taskDetails, Priority.ALWAYS);   
         
 
-        taskBox.getChildren().addAll(pri, check, taskDetails, tagBox, actionButtons);  // Add details and buttons to the main HBox
+        taskBox.getChildren().addAll(pri, check, taskDetails, tagBox, actionButtons);   
         
-        taskListContainer.getChildren().add(taskBox);  // Add the entire task box to the container
+        taskListContainer.getChildren().add(taskBox);   
     }
 
     private void openUserDetails()
@@ -439,11 +437,11 @@ public class ToDoList extends Application {
         VBox userLayout = new VBox(20,streakLabel,progressLabel,prog,compLabel,pendLabel);
         userLayout.setPadding(new Insets(10));
 
-        // Set the task form in the center of the main layout
+         
         mainLayout.setCenter(userLayout);
     }
 
-    // Style sidebar buttons
+     
     private void styleSidebarButton(Button button) {
         button.setStyle("-fx-background-color: #5A5A5A; -fx-text-fill: white; -fx-font-size: 14px;");
         button.setMinWidth(150);

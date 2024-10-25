@@ -49,8 +49,6 @@ public class UserProgress {
         if (t.getDueDate().equals(LocalDate.now()))
             completedToday++;
         lastCompletionDate = LocalDate.now();
-        updateStreak();
-        
     }
 
     // Update the streak
